@@ -67,4 +67,24 @@ Agentic Identification -- the idea is that AI agents themselevs can call on reso
 
 FIn. 
 
+Sept 9, '26 
+Understanding the architecture, and what we would use to implement it, why we would be using that to implement it
 
+According to the paper, there are 4 layers 
+Layer 1 (Zero Trust Telemetry) -> Layer 2 (Core Governance) -> Layer 3 (Intelligence -- making sense of what layer 2 produced) -> layer 4 (Final report generation) 
+
+IN the most layman terms, layers 1 and 2 checks logs and metadata for what type of confidential information is leaking, and if there is any confidential leaks. Layers 3 and 4 takes the raw data from the other two layers to give a comprehensible report. 
+
+Layer 3 and 4 use AI -- to prevent what the entire point of this project is - we should use an open weight model (which does not have ties to companies like openai or google), but only is dependent on the updates that might come onto that model -- no information is leaked. 
+
+The problem with this current version is mainly that we cannot see them using personal accounts. So I propose 
+Layer 1 (Grab Content) -> layer 2 (check metadata) -> layer 3(Core) -> layer 4 and 5 - comprehension and report gen
+
+Layer 1 is about behavior — what a specific person did, at a specific moment, on a specific device. Layer 2 is about infrastructure — what exists, continuously, across the company's official cloud footprint, regardless of who touched it or when. One catches a person doing something risky right now; the other proves the company's sanctioned AI estate is safe on an ongoing basis. You genuinely need both, because a company could pass every Layer 2 check perfectly (all sanctioned systems configured correctly) while still leaking data constantly through personal accounts Layer 1 exists specifically to catch — and vice versa, an org could have zero personal-account leakage while still running an unregistered, unmonitored internal model that only Layer 2's discovery function would ever surface.
+
+Concretely, what Layer 2 is still needed for, even with Layer 1 now in place:
+
+Sanctioned AI can still be misconfigured. Even if no one is leaking data to a personal ChatGPT account, the company's own, fully approved Bedrock deployment might have logging turned off, or PII scrubbing disabled, or be running a model nobody remembers enabling. Layer 1 wouldn't catch any of that — it only watches for content leaving toward unsanctioned destinations. A misconfigured sanctioned system is invisible to Layer 1 by design, since nothing about using an approved tool would ever trigger a "this looks like it's going somewhere it shouldn't" flag.
+Shadow AI within the cloud itself. An engineer quietly enabling an extra model in Bedrock, or standing up an unregistered internal service that calls a model — that's cloud-account activity, not a device pasting text into a browser. Layer 1's browser/clipboard hooks would never see it.
+Ongoing compliance evidence, not point-in-time incidents. Layer 2 is what lets you say "here's proof, over time, that our approved AI systems meet SOC 2 / ISO 42001 / EU AI Act requirements." Layer 1 produces incident-style alerts ("this happened at this time"), not a continuously-verifiable posture record.
+The credential/access-control story itself. Confused-deputy protection, scoped IAM roles, workspace isolation — none of that is Layer 1's concern at all; that's the specific discipline of reaching into cloud accounts safely, which only matters because Layer 2 needs to read from them.
