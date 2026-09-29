@@ -88,3 +88,42 @@ Sanctioned AI can still be misconfigured. Even if no one is leaking data to a pe
 Shadow AI within the cloud itself. An engineer quietly enabling an extra model in Bedrock, or standing up an unregistered internal service that calls a model — that's cloud-account activity, not a device pasting text into a browser. Layer 1's browser/clipboard hooks would never see it.
 Ongoing compliance evidence, not point-in-time incidents. Layer 2 is what lets you say "here's proof, over time, that our approved AI systems meet SOC 2 / ISO 42001 / EU AI Act requirements." Layer 1 produces incident-style alerts ("this happened at this time"), not a continuously-verifiable posture record.
 The credential/access-control story itself. Confused-deputy protection, scoped IAM roles, workspace isolation — none of that is Layer 1's concern at all; that's the specific discipline of reaching into cloud accounts safely, which only matters because Layer 2 needs to read from them.
+
+
+Sept 29, 2026 
+Workflow -- predominantly agent side
+
+Layers 1 and 2 would be working parallel-y (Layer 1 for detection on device, layer 2 for cloud-side work) 
+
+Situation - someone uploads sensitive data onto lets say chatgpt 
+
+Layer 1: 
+- The endpoint agent's browser hook sees a large paste event into chat.openai.com, a domain not on the sanctioned-destination allowlist.
+- Local pattern-matching runs against the pasted content on the device and gets a match against the "account number format" rule.
+- Depending on the response mode configured: a warning pops up ("this looks like it may contain sensitive data — continue?") or the paste is blocked outright.
+- A structured event is generated — device ID, pseudonymized user ID, timestamp, destination domain, pattern matched, action taken (warned/blocked) — and that event, not the pasted content itself, is sent upstream.
+
+Layer 2: 
+- no change - Layer 2 runs its usual scoped probes against AWS/Bedrock, LangSmith, Datadog, etc. — unaffected by what just happened in Step 1, since it's a completely separate detection path. This step doesn't need to "know about" the Layer 1 event at all; it's just still running in parallel.
+
+Layer 3: 
+- The Layer 1 event lands in the registry as a new record — logged against a lightweight "unsanctioned destination" entry for chat.openai.com, incrementing that team's unsanctionedTransmissionRate metric.
+Layer 3's Shadow AI discovery module treats this as a signal: repeated attempts toward the same unsanctioned destination gets flagged as active, ongoing personal-account usage — even though there's no cloud account for it to formally "discover."
+- Privacy/RoPA mapping cross-references this against what Layer 2 already knows about where account-number-type data is supposed to flow, and can now flag a mismatch: "sensitive data category X was attempted outside its declared/sanctioned flow."
+- None of this re-examines whether the original detection was correct — it just aggregates, contextualizes, and assigns severity based on frequency and data sensitivity.
+
+Layer 4: synthesizes it into narrative
+
+- The fine-tuned, self-hosted model takes the structured assertion (something like: unsanctionedTransmissionRate: elevated, team: customer-support, data-class: financial-identifiers, trend: increasing over 30 days) and writes it up as plain-language narrative.
+- It's strictly rephrasing what Layer 3 already decided — it doesn't independently judge severity, it just explains what was found in readable terms.
+
+Layer 5: packages it into the actual deliverables
+
+- Shows up in the executive report as a posture item: "Elevated risk of unsanctioned AI data transmission detected in [team], trending upward."
+- Feeds into framework alignment — this is exactly the kind of finding that maps to specific data-handling clauses in SOC 2 or GDPR-adjacent frameworks.
+- Does not appear on the public trust center page in this level of detail — that page is meant to show posture without leaking internal specifics, so this would likely roll up into a much more general statement like "active employee training and monitoring program in place," not the specific team or incident.
+
+Our main focus of architecture would be Layers 1,2,3; 4 and 5 are just LLM discerning and Report Generation
+
+
+Situation - 
