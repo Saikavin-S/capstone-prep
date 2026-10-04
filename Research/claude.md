@@ -180,26 +180,26 @@ It's Layer 3 that then determines, using Layer 0's policy, which of Layer 2's re
 
 ### Current Architecture Snapshot
 
-Layer 0	Policy & Data Classification Foundation	Human-declared, reference data	Defines what's sensitive, what's authorized, and what response each violation requires
-Layer 1	Endpoint Data-Loss Prevention	Event-driven, device-level	Detects sensitive content leaving toward unsanctioned destinations in real time
-Layer 2	Zero-Trust Telemetry Boundary	Schedule-driven, cloud-level	Reads configuration/inventory metadata from AWS/Bedrock, LangSmith, Datadog (and MCP/A2A gateways)
-Layer 3	Core Governance	Decision/convergence layer	Compares Layer 1/2 findings against Layer 0 policy; assigns severity and next action
-Layer 4	Intelligence & Synthesis	Self-hosted, fine-tuned LLM	Turns decided assertions into narrative — "writer, not judge"
-Layer 5	Governance Outputs	Reporting	Executive reports, framework alignment, trust center
+- Layer 0	Policy & Data Classification Foundation	Human-declared, reference data	Defines what's sensitive, what's authorized, and what response each violation requires
+- Layer 1	Endpoint Data-Loss Prevention	Event-driven, device-level	Detects sensitive content leaving toward unsanctioned destinations in real time
+- Layer 2	Zero-Trust Telemetry Boundary	Schedule-driven, cloud-level	Reads configuration/inventory metadata from AWS/Bedrock, LangSmith, Datadog (and MCP/A2A gateways)
+- Layer 3	Core Governance	Decision/convergence layer	Compares Layer 1/2 findings against Layer 0 policy; assigns severity and next action
+- Layer 4	Intelligence & Synthesis	Self-hosted, fine-tuned LLM	Turns decided assertions into narrative — "writer, not judge"
+- Layer 5	Governance Outputs	Reporting	Executive reports, framework alignment, trust center
 
 
 
 Open Design Questions Still to Resolve
-Where exactly Agent Identity's enforcement mechanism lives in the pipeline
-Org-scale (multi-account) discovery integration back into the core diagram
-Whether red-team attack generation is scripted or AI-driven
-Severity treatment for Shadow Tooling vs. Shadow AI findings
-Layer 4/5 execution cadence
-Block vs. warn vs. log policy for both Layer 1 and payload inspection
-Ongoing cost/maintenance of fine-tuning Layer 4's model
-Whether Layer 0 itself is verified or treated as ground truth
-Full evaluation methodology (precision/recall, false positive/negative rates, labeled test sets)
-The remediation/feedback loop after a violation is reported
+- Where exactly Agent Identity's enforcement mechanism lives in the pipeline
+- Org-scale (multi-account) discovery integration back into the core diagram
+- Whether red-team attack generation is scripted or AI-driven
+- Severity treatment for Shadow Tooling vs. Shadow AI findings
+- Layer 4/5 execution cadence
+- Block vs. warn vs. log policy for both Layer 1 and payload inspection
+- Ongoing cost/maintenance of fine-tuning Layer 4's model
+- Whether Layer 0 itself is verified or treated as ground truth
+- Full evaluation methodology (precision/recall, false positive/negative rates, labeled test sets)
+- The remediation/feedback loop after a violation is reported
 
 
 
