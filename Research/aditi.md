@@ -132,6 +132,7 @@ Situation -
 
 # AGENTLEAK
 Oct 4, 2026
+
 A Benchmark for Internal-Channel Privacy Leakage in Multi-Agent LLM Systems
 
 The main challenge is that current privacy evaluation focuses on what agents say to users, not what they say to each other. 
@@ -248,10 +249,17 @@ prompt-structure effect from the privacy coordination effect
 would require a controlled ablation where single-agent systems receive identically structured prompts, which we leave
 to future work.
 
-
-
-
-
-
 # https://github.com/Privatris/AgentLeak
+
+# Content Aware Attack - https://arxiv.org/html/2605.11053v3
+
+The Model Context Protocol (MCP) has become a widely adopted interface for LLM agents to invoke external tools, yet learned monitoring of MCP tool-call traffic remains underexplored. In this article, the proposed detector is presented as an attack detection framework for MCP tool-call traffic that encodes each agent session as a graph (tool calls as nodes, sequential and data-flow links as edges), enriches nodes with sentence-embedding features over arguments and responses, and classifies sessions as benign or attacked. Three GNN architectures (GAT, GCN, GraphSAGE), a no-graph MLP, and classical baselines (XGBoost, random forest, logistic regression, linear SVM) are evaluated, with the full architecture comparison conducted on RAS-Eval (task-stratified splits) and GraphSAGE retained as the GNN baseline on ATBench and a combined-source variant (both label-stratified). Three findings emerge. First, content-level features are essential: metadata-only detection plateaus around an AUROC of 0.64 regardless of architecture, while content embeddings push the AUROC above 0.89. Second, naive random-split evaluation inflates AUROC by up to 26 percentage points relative to task-disjoint splits, a memorization confound that prior agent-detection work has not addressed. Third, the detection signal resides primarily in the SBERT content embeddings: an AUROC of 0.975 was reached by tree ensembles on pooled embeddings, performing, for the most part, better than the neural architectures in the primary RAS-Eval setting including GNNs (0.917) and the MLP (0.896), and self-supervised pre-training does not deliver a label-efficiency advantage on this task.
+
+The problem is structurally analogous to network intrusion detection, where flow-based systems abstract raw packet streams into metadata records and flag deviations from learned baselines [5]. However, the analogy breaks down in practice because MCP attacks primarily alter the semantic content of tool interactions while leaving structural metadata unchanged, making metadata-only approaches ineffective for agent traffic.
+
+In this study, the proposed detector was presented as a content-aware attack detector for MCP tool-call traffic, and was used to study what carries the detection signal at the session level. It can be concluded that three findings emerge from the experimental results. First, the dominant signal is found to reside in the semantic content of arguments and responses, and structural metadata alone is insufficient regardless of architecture. On RAS-Eval, an AUROC of 0.975 was reached by tree ensembles on pooled SBERT embeddings, an outcome that, by and large, surpassed the neural architectures and confirms that the value of the proposed detector lies in the content-aware feature representation rather than the classification architecture. Second, it is important to mention that naive random-split evaluation conflates task memorization with attack detection. A task-stratified protocol is necessary for honest benchmarking of agent-level attack detection. Third, contrastive pre-training does not, on the whole, deliver the label-efficiency advantage commonly attributed to SSL on this task, and supervised training from scratch is, for the most part, at least as strong below the full label budget.
+
+It remains to be seen whether temporal graph modeling for session-level dynamics will further improve detection. Future work will also evaluate the proposed detector on real-world MCP attack logs as they become available, and investigate federated deployment for cross-organization monitoring without centralizing sensitive tool-call data.
+
+
 
