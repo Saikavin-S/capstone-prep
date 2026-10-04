@@ -26,3 +26,5 @@ After Kavin stated about AI usage in organizations-
 
 # https://cdn.openai.com/pdf/how-organizations-use-chatgpt.pdf
 
+https://arxiv.org/pdf/2602.11510
+
