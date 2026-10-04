@@ -190,6 +190,66 @@ scenarios with verifiable outputs, e.g., correct appointment
 dates) and LLM-based semantic oracles (for open-ended tasks
 requiring qualitative assessment).
 
+B. CLARIFYING INTERNAL CHANNEL LEAKAGE:
+VIOLATIONS, RISKS, AND BREACHES
+Our methodology treats all non-allowed internal disclosures
+as “leakage,” which raises a natural question: is internal oversharing between trusted agents always a privacy violation?
+We distinguish three levels, drawing on contextual integrity
+theory [15]:
+(1) Policy violation (data minimization breach): An agent
+shares more data than the task strictly requires, violating the
+minimization principle (GDPR Art. 5(1)(c), Law 25 Sec. 5).
+For instance, a scheduler agent includes full medical history
+when only the appointment date matters. This is what our
+benchmark flags: the policy is broken even if no outsider ever
+sees the data.
+(2) Risk amplification: Over-sharing internally widens
+the attack surface. Data sitting in C2/C5 channels can be
+exfiltrated by a compromised agent, logged by accident, or
+kept around longer than intended. Nothing has left the trusted
+context yet, but the odds of eventual breach go up. Our proofof-concept attack (Section VII) demonstrates this risk in
+practice.
+(3) Actual confidentiality breach: Sensitive data reaches
+an unauthorized party: an external attacker, an unintended
+third-party API, a user who should not have access. This is
+the classic definition of a breach.
+Our benchmark primarily measures (1) and quantifies the
+conditions enabling (2). We do not claim that every internal
+over-sharing constitutes an actual breach (3). However, under data protection regulations that mandate minimization by
+design (GDPR Art. 25, Law 25 Sec. 9.1), level (1) alone
+may constitute non-compliance. The 41.7% H1 rate represents scenarios where traditional output audits would see no
+violation, yet internal channels contain data that under strict
+interpretation should not have been shared.
+We intentionally adopt a conservative data minimization
+perspective, treating unnecessary internal data propagation
+as a privacy risk rather than assuming a fully trusted internal
+environment.
+Tradeoff: This creates a difficult business decision. Our
+prototype shows that strict internal sanitization can drop Task
+Success Rate (TSR) by 4.7 points (from 78.6% to 73.9%).
+For highly regulated industries (e.g., healthcare), a ∼5%
+drop in utility is likely an acceptable cost for compliance
+assurance. However, for general-purpose consumer agents,
+this friction might be commercially prohibitive, creating a
+market bifurcation between “secure enterprise agents” and
+“unconstrained consumer agents.”
+Implication: Organizations must decide their risk tolerance.
+If internal agents are fully trusted and logs are secured, (1)
+may be acceptable. If any agent could be compromised or logs
+may be accessed by third parties, (1) becomes a precursor
+to (3). Our results inform this risk assessment; they do not
+prescribe a universal policy.
+We note that the lower C1 leakage in multi-agent mode
+(27.2% vs. 43.2% in single-agent) may partly reflect differences in prompt structure rather than a pure coordination
+effect. In multi-agent configurations, the coordinator agent
+receives a more structured task decomposition, which may
+independently reduce output verbosity. Disentangling this
+prompt-structure effect from the privacy coordination effect
+would require a controlled ablation where single-agent systems receive identically structured prompts, which we leave
+to future work.
+
+
+
 
 
 
